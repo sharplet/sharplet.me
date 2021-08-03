@@ -1,19 +1,19 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.4
+
 import PackageDescription
 
 let package = Package(
     name: "Blog",
+    platforms: [
+        .macOS("11.0"),
+    ],
     dependencies: [
-        // 💧 A server-side Swift web framework.
-        .package(url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
-
-        // 🔵 Swift ORM (queries, models, relations, etc) built on SQLite 3.
-        .package(url: "https://github.com/vapor/fluent-sqlite.git", from: "3.0.0")
+        .package(name: "Vapor", url: "https://github.com/vapor/vapor.git", from: "3.0.0"),
+        .package(name: "FluentSQLite", url: "https://github.com/vapor/fluent-sqlite.git", from: "3.0.0"),
     ],
     targets: [
+        .executableTarget(name: "Run", dependencies: ["App"]),
         .target(name: "App", dependencies: ["FluentSQLite", "Vapor"]),
-        .target(name: "Run", dependencies: ["App"]),
-        .testTarget(name: "AppTests", dependencies: ["App"])
+        .testTarget(name: "AppTests", dependencies: ["App"]),
     ]
 )
-
