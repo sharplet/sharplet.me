@@ -8,9 +8,10 @@ let package = Package(
     .macOS(.v11),
   ],
   dependencies: [
-    .package(url: "https://github.com/vapor/vapor.git", from: "4.48.3"),
     .package(url: "https://github.com/vapor/fluent.git", from: "4.3.1"),
     .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.1.0"),
+    .package(url: "https://github.com/vapor/sqlite-nio.git", from: "1.1.0"),
+    .package(url: "https://github.com/vapor/vapor.git", from: "4.48.3"),
   ],
   targets: [
     .executableTarget(name: "Run", dependencies: ["App"]),
@@ -19,6 +20,7 @@ let package = Package(
       dependencies: [
         .product(name: "Fluent", package: "fluent"),
         .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
+        .product(name: "SQLiteNIO", package: "sqlite-nio"),
         .product(name: "Vapor", package: "vapor"),
       ]
     ),
