@@ -1,26 +1,27 @@
-import FluentSQLite
+import Fluent
 import Vapor
 
-/// A single entry of a Todo list.
-final class Todo: SQLiteModel {
-    /// The unique identifier for this `Todo`.
-    var id: Int?
+final class Todo: Model, Content {
+  static var schema: String {
+    "todos"
+  }
 
-    /// A title describing what this `Todo` entails.
-    var title: String
+  @ID(custom: "id") var id: Int?
+  @Field(key: "title") var title: String
 
-    /// Creates a new `Todo`.
-    init(id: Int? = nil, title: String) {
-        self.id = id
-        self.title = title
-    }
+  init() {}
 }
 
-/// Allows `Todo` to be used as a dynamic migration.
-extension Todo: Migration {}
+struct CreateTodos: Migration {
+  func prepare(on database: Database) -> EventLoopFuture<Void> {
+    database.schema("todos")
+      .field("id", .int, .identifier(auto: true))
+      .field("title", .string, .required)
+      .create()
+  }
 
-/// Allows `Todo` to be encoded to and decoded from HTTP messages.
-extension Todo: Content {}
-
-/// Allows `Todo` to be used as a dynamic parameter in route definitions.
-extension Todo: Parameter {}
+  func revert(on database: Database) -> EventLoopFuture<Void> {
+    database.schema("todos")
+      .delete()
+  }
+}
